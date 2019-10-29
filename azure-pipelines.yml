@@ -11,6 +11,7 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
+  project: '/CoalPassAPI/CoalPassAPI.csproj'
 
 steps:
 - script: dotnet build --configuration $(buildConfiguration)
