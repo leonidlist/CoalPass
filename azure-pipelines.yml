@@ -4,14 +4,13 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
 trigger:
-- master
+- develop
 
 pool:
   vmImage: 'ubuntu-latest'
 
 variables:
   buildConfiguration: 'Release'
-  project: '/CoalPassAPI/CoalPassAPI.csproj'
 
 steps:
 - script: dotnet build --configuration $(buildConfiguration)
