@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 using CoalPassDAL.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using CoalPassDAL.Models;
+using CoalPassDAL.Abstractions;
 
 namespace CoalPassAPI.Controllers
 {
     [Route("api/[controller]")]
     public class UsersController : Controller
     {
-        private UsersRepository _usersRepository = new UsersRepository();
+        private IAsyncRepository<User> _usersRepository = new UsersRepository();
 
         [HttpGet]
         public IEnumerable<User> Get()

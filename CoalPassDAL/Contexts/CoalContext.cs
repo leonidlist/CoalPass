@@ -10,6 +10,7 @@ namespace CoalPassDAL.Contexts
         IGridFSBucket gridFS;
 
         public IMongoCollection<User> Users { get => database.GetCollection<User>("Users"); }
+        public IMongoCollection<Password> Passwords { get => database.GetCollection<Password>("Passwords"); }
 
         public CoalContext(string connectionString)
         {
