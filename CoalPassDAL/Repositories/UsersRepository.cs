@@ -44,5 +44,10 @@ namespace CoalPassDAL.Repositories
         {
             await _context.Users.DeleteOneAsync(new BsonDocument("_id", new ObjectId(id)));
         }
+
+        public async Task Update(User item)
+        {
+            await _context.Users.ReplaceOneAsync(new BsonDocument("_id", new ObjectId(item.Id)), item);  
+        }
     }
 }
