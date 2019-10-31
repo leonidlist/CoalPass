@@ -16,23 +16,34 @@ namespace CoalPassAPI.Controllers
         private IAsyncRepository<User> _usersRepository = new UsersRepository();
 
         [HttpGet]
-        public IEnumerable<User> Get()
+        public async Task<IEnumerable<User>> Get()
         {
-            return _usersRepository.GetAll().Result;
+            return await _usersRepository.GetAll();
         }
 
         [HttpGet("{id}")]
-        public User Get(string id)
+        public async Task<User> Get(string id)
         {
-            return _usersRepository.Get(id).Result;
+            return await _usersRepository.Get(id);
         }
 
         [HttpPut]
-        public IActionResult Put([FromBody]User user) {
+        public async Task<IActionResult> Put([FromBody]User user)
+        {
+            if (user == null)
+                return BadRequest();
+
+            await _usersRepository.Add(user);
+            return Ok(user);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody]User user)
+        {
             if(user == null)
                 return BadRequest();
-            
-            _usersRepository.Add(user).GetAwaiter().GetResult();
+
+            await _usersRepository.Update(user);
             return Ok(user);
         }
     }
