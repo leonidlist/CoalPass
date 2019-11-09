@@ -11,10 +11,10 @@ namespace CoalPassDAL.Repositories
 {
     public class UsersRepository : IAsyncRepository<User>
     {
-        private CoalContext _context;
-        public UsersRepository(string connectionString = "mongodb://localhost:27017/CoalPassAPI")
+        private MongoDbContext _context;
+        public UsersRepository(MongoDbContext context)
         {
-            _context = new CoalContext(connectionString);
+            _context = context;
         }
 
         public async Task Add(User item)

@@ -13,7 +13,12 @@ namespace CoalPassAPI.Controllers
     [Route("api/[controller]")]
     public class UsersController : Controller
     {
-        private IAsyncRepository<User> _usersRepository = new UsersRepository();
+        private IAsyncRepository<User> _usersRepository;
+
+        public UsersController(IAsyncRepository<User> usersRepository)
+        {
+            _usersRepository = usersRepository;
+        }
 
         [HttpGet]
         public async Task<IEnumerable<User>> Get()

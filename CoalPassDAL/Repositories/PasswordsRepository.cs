@@ -10,10 +10,10 @@ namespace CoalPassDAL.Repositories
 {
     public class PasswordsRepository : IAsyncRepository<Password>
     {
-        private CoalContext _context;
-        public PasswordsRepository(string connectionString = "mongodb://localhost:27017/CoalPassAPI")
+        private MongoDbContext _context;
+        public PasswordsRepository(MongoDbContext context)
         {
-            _context = new CoalContext(connectionString);
+            _context = context;
         }
 
         public async Task Add(Password item)
