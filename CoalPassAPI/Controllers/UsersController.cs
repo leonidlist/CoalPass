@@ -22,9 +22,16 @@ namespace CoalPassAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<User> Get(string id)
+        public async Task<IActionResult> Get(string id)
         {
-            return await _usersRepository.Get(id);
+            //TODO: use services instead of repositories!
+            var result = await _usersRepository.Get(id);
+
+            if (result == null)
+            {
+                return NotFound("User data did not found.");
+            }
+            return Ok(result);
         }
 
         [HttpPut]
@@ -34,7 +41,7 @@ namespace CoalPassAPI.Controllers
                 return BadRequest();
 
             await _usersRepository.Add(user);
-            return Ok(user);
+            return Ok(user.Id);
         }
 
         [HttpPost]
