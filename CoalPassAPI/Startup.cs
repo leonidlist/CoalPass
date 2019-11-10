@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CoalPassDAL.Abstractions;
+using CoalPassDAL.Contexts;
+using CoalPassDAL.Models;
+using CoalPassDAL.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -15,33 +19,38 @@ namespace CoalPassAPI
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
+        public IConfiguration Configuration { get; private set; }
+        public IHostingEnvironment Environment { get; private set; }
 
-        public IConfiguration Configuration { get; }
+        public Startup(IHostingEnvironment env)
+        {
+            Environment = env;
+        }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            Configuration = new ConfigurationBuilder()
+                                    .AddJsonFile($"{Environment.ContentRootPath}/appsettings.json")
+                                        .AddJsonFile($"{Environment.ContentRootPath}/appsettings.{Environment.EnvironmentName}.json")
+                                            .Build();
+
+            ConfigureWebApiControllers(services);
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseHsts();
-            }
-
             app.UseHttpsRedirection();
             app.UseMvc();
+        }
+
+        private void ConfigureWebApiControllers(IServiceCollection services)
+        {
+            services.AddSingleton(x => new MongoDbContext(Configuration.GetConnectionString("mongoDb")));
+            services.AddSingleton<IAsyncRepository<User>, UsersRepository>();
         }
     }
 }
