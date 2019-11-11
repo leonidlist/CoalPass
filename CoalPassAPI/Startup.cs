@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CoalPassBLL.DTO;
+using CoalPassBLL.Services;
 using CoalPassDAL.Abstractions;
 using CoalPassDAL.Contexts;
 using CoalPassDAL.Models;
@@ -51,6 +53,9 @@ namespace CoalPassAPI
         {
             services.AddSingleton(x => new MongoDbContext(Configuration.GetConnectionString("mongoDb")));
             services.AddSingleton<IAsyncRepository<User>, UsersRepository>();
+            services.AddSingleton<IAsyncRepository<Password>, PasswordsRepository>();
+            services.AddSingleton<IService<RecordDTO>, RecordsService>();
+            services.AddSingleton<IService<UserDTO>, UsersService>();
         }
     }
 }

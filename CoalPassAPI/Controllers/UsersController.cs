@@ -7,48 +7,50 @@ using CoalPassDAL.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using CoalPassDAL.Models;
 using CoalPassDAL.Abstractions;
+using CoalPassBLL.Services;
+using CoalPassBLL.DTO;
 
 namespace CoalPassAPI.Controllers
 {
     [Route("api/[controller]")]
     public class UsersController : Controller
     {
-        private IAsyncRepository<User> _usersRepository;
+        private readonly IService<UserDTO> _usersService;
 
-        public UsersController(IAsyncRepository<User> usersRepository)
+        public UsersController(IService<UserDTO> usersService)
         {
-            _usersRepository = usersRepository;
+            _usersService = usersService;
         }
 
         [HttpGet]
-        public async Task<IEnumerable<User>> Get()
+        public async Task<IEnumerable<UserDTO>> Get()
         {
-            return await _usersRepository.GetAll();
+            return await _usersService.GetAll();
         }
 
         [HttpGet("{id}")]
-        public async Task<User> Get(string id)
+        public async Task<UserDTO> Get(string id)
         {
-            return await _usersRepository.Get(id);
+            return await _usersService.Get(id);
         }
 
         [HttpPut]
-        public async Task<IActionResult> Put([FromBody]User user)
+        public async Task<IActionResult> Put([FromBody]UserDTO user)
         {
             if (user == null)
                 return BadRequest();
 
-            await _usersRepository.Add(user);
+            await _usersService.Add(user);
             return Ok(user);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]User user)
+        public async Task<IActionResult> Post([FromBody]UserDTO user)
         {
             if(user == null)
                 return BadRequest();
 
-            await _usersRepository.Update(user);
+            await _usersService.Update(user);
             return Ok(user);
         }
     }
